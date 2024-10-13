@@ -3,11 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Converter</title>
-    <!-- Link to the DM Sans font -->
+    <title>File Converter and 3D Model Viewer</title>
     <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;700&display=swap" rel="stylesheet">
-    <!-- Favicon -->
-    <link rel="icon" href="ico.ico" type="image/x-icon">
     <style>
         body {
             margin: 0;
@@ -19,238 +16,42 @@
             background-color: white;
             font-family: 'DM Sans', sans-serif;
         }
-        .blue-rectangle {
-            width: 90vw;
-            height: 200px;
-            background-color: #87CEEB;
+        .button {
+            width: 200px;
+            height: 60px;
             border-radius: 25px;
             display: flex;
             justify-content: center;
             align-items: center;
             font-family: 'DM Sans', sans-serif;
             font-size: 20px;
-            color: black;
-            border: 2px dashed #0000FF;
+            color: white;
+            text-decoration: none;
+            margin: 10px;
             cursor: pointer;
-            margin-bottom: 20px;
+            transition: background-color 0.3s ease, border-color 0.3s ease;
+            border: 2px dotted transparent; /* Dotted border */
         }
-        .blue-rectangle.dragover {
-            background-color: #add8e6;
+        .converter {
+            background-color: #87CEEB; /* Blue color */
+            border-color: #0000FF; /* Blue border */
         }
-        .dropdowns {
-            display: flex;
-            align-items: center;
-            margin-top: 20px;
+        .converter:hover {
+            background-color: #A0D7EB; /* Lighter blue on hover */
         }
-        select {
-            font-family: 'DM Sans', sans-serif;
-            font-size: 16px;
-            padding: 5px;
-            border-radius: 5px;
-            margin: 0 10px;
-            cursor: pointer;
+        .model-viewer {
+            background-color: #FF69B4; /* Light pink color */
+            border-color: #FF1493; /* Pink border */
         }
-        .to-text {
-            font-size: 20px;
-            color: black;
-        }
-        .convert-button {
-            width: 200px; /* Smaller width */
-            height: 60px; /* Smaller height */
-            background-color: #87CEEB;
-            border-radius: 25px;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            font-family: 'DM Sans', sans-serif;
-            font-size: 20px;
-            color: black;
-            border: 2px dashed #0000FF;
-            cursor: pointer;
-            margin-bottom: 20px; /* Move button above */
-        }
-        .error-message {
-            color: red;
-            font-size: 16px;
-            margin-top: 10px;
-            display: none;
-        }
-        input[type="file"] {
-            display: none;
+        .model-viewer:hover {
+            background-color: #FF85C4; /* Lighter pink on hover */
         }
     </style>
 </head>
 <body>
 
-    <!-- Convert Button Above -->
-    <div class="convert-button" id="convertButton">
-        Convert
-    </div>
-
-    <div class="blue-rectangle" id="dropzone">
-        Drag a file here or click to select
-    </div>
-    <input type="file" id="fileInput">
-
-    <!-- Dropdowns Section -->
-    <div class="dropdowns">
-        <select id="dropdown1">
-            <option value="png">PNG</option>
-            <option value="jpeg">JPEG / JPG</option>
-            <option value="gif">GIF</option>
-            <option value="bmp">BMP</option>
-            <option value="tiff">TIFF</option>
-            <option value="webp">WebP</option>
-            <option value="heic">HEIC</option>
-            <option value="avif">AVIF</option>
-            <option value="ico">ICO</option>
-            <option value="psd">Photoshop (PSD)</option>
-            <option value="eps">EPS</option>
-            <option value="pdf">PDF</option>
-            <option value="svg">SVG</option>
-            <option value="raw">RAW</option>
-            <option value="cr2">Canon RAW (CR2)</option>
-            <option value="nef">Nikon RAW (NEF)</option>
-            <option value="arw">Sony RAW (ARW)</option>
-        </select>
-        <span class="to-text">to</span>
-        <select id="dropdown2">
-            <option value="png">PNG</option>
-            <option value="jpeg">JPEG / JPG</option>
-            <option value="gif">GIF</option>
-            <option value="bmp">BMP</option>
-            <option value="tiff">TIFF</option>
-            <option value="webp">WebP</option>
-            <option value="heic">HEIC</option>
-            <option value="avif">AVIF</option>
-            <option value="ico">ICO</option>
-            <option value="psd">Photoshop (PSD)</option>
-            <option value="eps">EPS</option>
-            <option value="pdf">PDF</option>
-            <option value="svg">SVG</option>
-            <option value="raw">RAW</option>
-            <option value="cr2">Canon RAW (CR2)</option>
-            <option value="nef">Nikon RAW (NEF)</option>
-            <option value="arw">Sony RAW (ARW)</option>
-        </select>
-    </div>
-
-    <!-- Error Message -->
-    <div class="error-message" id="errorMessage">Error: Check file and format selections.</div>
-
-    <script>
-        const dropzone = document.getElementById('dropzone');
-        const fileInput = document.getElementById('fileInput');
-        const errorMessage = document.getElementById('errorMessage');
-        let selectedFile = null; // Track selected file
-        let newFileName = ''; // Track the new file name after conversion
-        let newFileData = null; // Track the new file's data
-
-        // Prevent default drag behaviors
-        ['dragenter', 'dragover', 'dragleave', 'drop'].forEach(eventName => {
-            dropzone.addEventListener(eventName, preventDefaults, false);
-        });
-
-        function preventDefaults(e) {
-            e.preventDefault();
-            e.stopPropagation();
-        }
-
-        // Highlight the drop zone when file is dragged over
-        ['dragenter', 'dragover'].forEach(eventName => {
-            dropzone.classList.add('dragover');
-        });
-
-        // Remove highlight when drag leaves the drop zone
-        ['dragleave', 'drop'].forEach(eventName => {
-            dropzone.classList.remove('dragover');
-        });
-
-        // Handle file drop
-        dropzone.addEventListener('drop', (e) => {
-            let dt = e.dataTransfer;
-            let files = dt.files;
-
-            if (files.length > 0) {
-                selectedFile = files[0];
-                dropzone.textContent = `File: ${files[0].name}`;
-            }
-        });
-
-        // Handle click to trigger file input
-        dropzone.addEventListener('click', () => {
-            if (newFileData) {
-                downloadFile(newFileName, newFileData);
-            } else {
-                fileInput.click();
-            }
-        });
-
-        // Handle file selection from dialog
-        fileInput.addEventListener('change', (e) => {
-            let files = e.target.files;
-
-            if (files.length > 0) {
-                selectedFile = files[0];
-                dropzone.textContent = `File: ${files[0].name}`;
-            }
-        });
-
-        // Extract file extension
-        function getFileExtension(fileName) {
-            return fileName.split('.').pop().toLowerCase();
-        }
-
-        // Handle convert button click
-        document.getElementById('convertButton').addEventListener('click', () => {
-            const formatFrom = document.getElementById('dropdown1').value;
-            const formatTo = document.getElementById('dropdown2').value;
-
-            if (!selectedFile) {
-                errorMessage.textContent = 'Error: No file selected.';
-                errorMessage.style.display = 'block';
-            } else if (formatFrom === formatTo) {
-                errorMessage.textContent = 'Error: Same file types selected.';
-                errorMessage.style.display = 'block';
-            } else if (getFileExtension(selectedFile.name) !== formatFrom && !validateRawFormat(selectedFile.name, formatFrom)) {
-                errorMessage.textContent = `Error: File type doesn't match the first dropdown (${formatFrom.toUpperCase()}).`;
-                errorMessage.style.display = 'block';
-            } else {
-                errorMessage.style.display = 'none'; // Hide error message on success
-                convertFile(formatFrom, formatTo, selectedFile);
-            }
-        });
-
-        // Function to validate RAW formats based on file name
-        function validateRawFormat(fileName, format) {
-            const rawFormats = ['cr2', 'nef', 'arw'];
-            return rawFormats.includes(format) && rawFormats.includes(getFileExtension(fileName));
-        }
-
-        // Mock file conversion function
-        function convertFile(formatFrom, formatTo, file) {
-            // Mocking a file conversion by creating new data URL
-            // This is where actual file conversion logic would go.
-            const fileNameWithoutExt = file.name.split('.').slice(0, -1).join('.');
-            newFileName = `${fileNameWithoutExt}.${formatTo}`;
-
-            // Simulate a new file data as a base64 URL (for mock purposes)
-            newFileData = `data:image/${formatTo};base64,ZmFrZURhdGE=`;
-
-            // Update dropzone with the new file name and download message
-            dropzone.textContent = `${newFileName} - click to download`;
-        }
-
-        // Handle file download
-        function downloadFile(fileName, fileData) {
-            const link = document.createElement('a');
-            link.href = fileData;
-            link.download = fileName;
-            document.body.appendChild(link);
-            link.click();
-            document.body.removeChild(link);
-        }
-    </script>
+    <a href="converter.html" class="button converter">Converter</a>
+    <a href="modelviewer.html" class="button model-viewer">3D Model Viewer</a>
 
 </body>
 </html>
