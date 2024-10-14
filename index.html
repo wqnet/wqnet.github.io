@@ -3,55 +3,60 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>File Converter and 3D Model Viewer</title>
+    <title>The File Hub</title>
     <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;700&display=swap" rel="stylesheet">
     <style>
         body {
             margin: 0;
             height: 100vh;
             display: flex;
-            justify-content: center;
-            align-items: center;
             flex-direction: column;
             background-color: white;
             font-family: 'DM Sans', sans-serif;
+            align-items: center; /* Centering title and buttons */
+        }
+        h1 {
+            margin: 20px 0; /* Margin for spacing */
+            font-size: 2.5em; /* Adjust font size as needed */
+            color: black; /* Black text color */
         }
         .button {
             width: 200px;
             height: 60px;
-            border-radius: 25px;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            font-family: 'DM Sans', sans-serif;
-            font-size: 20px;
-            color: white;
-            text-decoration: none;
-            margin: 10px;
+            border-radius: 15px;
+            border: 2px dashed #0000FF; /* Matching dotted border */
+            font-size: 1.2em;
+            color: black; /* Button text color */
             cursor: pointer;
-            transition: background-color 0.3s ease, border-color 0.3s ease;
-            border: 2px dotted transparent; /* Dotted border */
+            margin: 10px;
+            transition: transform 0.2s, border-color 0.2s;
         }
         .converter {
-            background-color: #87CEEB; /* Blue color */
-            border-color: #0000FF; /* Blue border */
+            background-color: #87CEEB; /* Lighter blue for converter button */
         }
-        .converter:hover {
-            background-color: #A0D7EB; /* Lighter blue on hover */
+        .modelviewer {
+            background-color: #FF69B4; /* Light pink */
+            border-color: #FF1493; /* Darker pink border */
         }
-        .model-viewer {
-            background-color: #FF69B4; /* Light pink color */
-            border-color: #FF1493; /* Pink border */
+        .audioplayer {
+            background-color: #90EE90; /* Light pink */
+            border-color: #008000; /* Darker pink border */
+            
         }
-        .model-viewer:hover {
-            background-color: #FF85C4; /* Lighter pink on hover */
+        .videoplayer {
+            background-color: #FFDBBB; /* Light pink */
+            border-color: #FF8C00; /* Darker pink border */
         }
     </style>
 </head>
 <body>
 
-    <a href="converter.html" class="button converter">Converter</a>
-    <a href="modelviewer.html" class="button model-viewer">3D Model Viewer</a>
+    <h1>The File Hub</h1> <!-- Title added here -->
+    
+    <button class="button converter" onclick="window.location.href='converter.html'">Converter</button>
+    <button class="button modelviewer" onclick="window.location.href='modelviewer.html'">3D Model Editor</button>
+    <button class="button audioplayer" onclick="window.location.href='audioplayer.html'">Audio Editor</button>
+    <button class="button videoplayer" onclick="window.location.href='videoplayer.html'">Video Editor</button>
 
 </body>
 </html>
