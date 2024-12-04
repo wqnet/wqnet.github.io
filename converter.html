@@ -272,13 +272,35 @@
         }
 
         function performConversion(file, formatFrom, formatTo) {
-            newFileName = file.name.replace(`.${formatFrom}`, `.${formatTo}`);
-            newFileData = `Converted data of ${newFileName}`;
+    const newFileName = file.name.replace(`.${formatFrom}`, `.${formatTo}`);
 
-            dropzone.textContent = `${newFileName} (Click to download)`;
-            dropzone.addEventListener('click', downloadNewFile);
-            errorMessage.style.display = 'none';
-        }
+    // Use FileReader to read the file as a binary string or ArrayBuffer
+    const reader = new FileReader();
+
+    reader.onload = function(event) {
+        const fileData = event.target.result;
+
+        // Create a Blob from the file data and new file format (this example assumes conversion happens server-side or via some other method)
+        const newFileData = new Blob([fileData], { type: file.type });
+
+        // Create a URL for the new file
+        const newFileUrl = URL.createObjectURL(newFileData);
+
+        dropzone.textContent = `${newFileName} (Click to download)`;
+        dropzone.addEventListener('click', () => {
+            const a = document.createElement('a');
+            a.href = newFileUrl;
+            a.download = newFileName;
+            a.click();
+        });
+
+        errorMessage.style.display = 'none';
+    };
+
+    // Read the file as a binary string (or ArrayBuffer if necessary for specific file types)
+    reader.readAsArrayBuffer(file);
+}
+
 
         function downloadNewFile() {
             const blob = new Blob([newFileData], { type: 'application/octet-stream' });
