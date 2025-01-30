@@ -47,6 +47,7 @@
             background: white;
             padding: 20px;
             text-align: center;
+            
             box-shadow: 0px 0px 10px rgba(0,0,0,0.3);
             width: 300px;
             border-radius: 8px;
@@ -94,7 +95,7 @@
 
     <div class="overlay" id="overlay">
         <div class="popup">
-            <p>Do you agree to our <a href="#" onclick="showTerms()">terms and services</a>?</p>
+            <p>Do you agree to our <a href="#" onclick="showTerms()" style="font-size: 0.9em;">terms and services</a>?</p>
             <input type="checkbox" id="acceptTerms" onclick="toggleAgreeButton()"> I have read and agree to the terms
             <br><br>
             <button id="agreeButton" onclick="agreeTerms()" disabled>I Agree</button>
