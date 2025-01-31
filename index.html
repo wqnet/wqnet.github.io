@@ -144,15 +144,13 @@ By using these shortcuts, you confirm that you have read, understood, and agreed
         function closeTerms() {
             document.getElementById("terms-box").style.display = "none";
         }
-    </script>
-    <script>
         // Highlight the active page in the navbar
         document.addEventListener("DOMContentLoaded", () => {
-            const links = document.querySelectorAll(".navbar a");
+            const links = document.querySelectorAll(".navbar");
             const currentPage = window.location.pathname;
     
             links.forEach((link) => {
-                if (link.getAttribute("href") === currentPage) {
+                if (link.getAttribute("href") == currentPage) {
                     link.style.backgroundColor = "white";
                     link.style.color = "#333"; // Adjust the text color for contrast
                     link.style.borderRadius = "5px"; // Optional for a cleaner look
