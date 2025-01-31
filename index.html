@@ -150,7 +150,8 @@ By using these shortcuts, you confirm that you have read, understood, and agreed
             const currentPage = window.location.pathname;
     
             links.forEach((link) => {
-                if (link.getAttribute("href") == currentPage) {
+                var url =  link.getAttribute("href").substring(0, 28);
+                if (url == currentPage) {
                     link.style.backgroundColor = "white";
                     link.style.color = "#333"; // Adjust the text color for contrast
                     link.style.borderRadius = "5px"; // Optional for a cleaner look
