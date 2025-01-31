@@ -83,6 +83,22 @@
         .shortcut-card a:hover {
             background: #f0f0f0;
         }
+        .container {
+            position: relative; /* Makes the container the reference point */
+            height: 500px; /* Example height for the container */
+            border: 1px solid #ccc; /* Optional: to visualize the container */
+        }
+
+        .footnote {
+            position: absolute; /* Positions the footnote relative to the container */
+            bottom: 10px; /* 10px from the bottom of the container */
+            left: 50%; /* Centers horizontally */
+            transform: translateX(-50%); /* Adjusts for the element's width to truly center */
+            font-size: 0.75em;
+            color: #666;
+            text-align: center;
+        }
+
     </style>
 </head>
 <body>
@@ -114,6 +130,8 @@
         </div>
         <!-- Add more shortcut cards by copying the section above -->
     </div>
-<small>Terms and Conditions do Apply</small>
+<div class="container">
+  <p1 class="footnote">Terms and conditions Apply</p1>
+</div>
 </body>
 </html>
