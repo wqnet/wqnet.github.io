@@ -38,7 +38,7 @@
             left: 0;
             width: 100%;
             height: 100%;
-            background: rgba(0,0,0,0.5);
+            background: rgba(0, 0, 0, 0.5);
             display: flex;
             justify-content: center;
             align-items: center;
@@ -47,10 +47,15 @@
             background: white;
             padding: 20px;
             text-align: center;
-            
-            box-shadow: 0px 0px 10px rgba(0,0,0,0.3);
+            box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.3);
             width: 300px;
             border-radius: 8px;
+        }
+        .small-footnote {
+            text-align: center;
+            color: grey;
+            font-size: 0.8em;
+            margin-top: 20px;
         }
         .terms-box {
             display: none;
@@ -63,11 +68,11 @@
             width: 400px;
             max-height: 300px;
             overflow-y: auto;
-            box-shadow: 0px 0px 10px rgba(0,0,0,0.3);
+            box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.3);
             border-radius: 8px;
         }
         .close-btn {
-            background: rgba(0,0,0,0.5);
+            background: rgba(0, 0, 0, 0.5);
             color: white;
             border: none;
             padding: 5px 10px;
@@ -79,7 +84,7 @@
 <body>
 
     <div class="navbar">
-        <a href='index.html'>Home</a>
+        <a href="index.html">Home</a>
         <a href="shortcuts.html">Shortcuts</a>
         <a href="#">Unofficial Shortcuts</a>
         <a href="#">Wiki</a>
@@ -95,7 +100,7 @@
 
     <div class="overlay" id="overlay">
         <div class="popup">
-            <p>Do you agree to our <a href="#" onclick="showTerms()" style="font-size: 0.9em;">terms and services</a>?</p>
+            <p>Do you agree to our <a href="#" onclick="showTerms()">terms and services</a>?</p>
             <input type="checkbox" id="acceptTerms" onclick="toggleAgreeButton()"> I have read and agree to the terms
             <br><br>
             <button id="agreeButton" onclick="agreeTerms()" disabled>I Agree</button>
@@ -105,25 +110,10 @@
     <div class="terms-box" id="terms-box">
         <button class="close-btn" onclick="closeTerms()">X</button>
         <h3>Terms and Services</h3>
-        <p>By checking the box, you (the "User") expressly acknowledge and agree to the following:
-
-Device Liability Acknowledgment
-The use of these shortcuts may result in temporary disruptions, malfunctions, or damage to your iPad or other compatible devices (collectively referred to as the "Device"). The creators, developers, and manufacturers of these shortcuts (the "Providers") disclaim all liability for any such issues or damages. The User assumes full responsibility for addressing any problems that may arise. In most cases, such issues can be resolved by performing a hard reset of the Device (e.g., holding the power and home buttons simultaneously for a duration of at least 15 seconds). If the issue persists, the User is advised to contact the relevant manufacturer or service provider for additional assistance.
-Prohibited Use in Academic and Similar Settings
-The use of these shortcuts during classroom instruction, examinations, or other educational or professional settings is discouraged. The Providers disclaim all responsibility for any consequences, including but not limited to disciplinary actions or penalties imposed by educational institutions, organizations, or employers, arising from the User’s use of these shortcuts in such contexts.
-Data Privacy and Collection
-These shortcuts do not collect, store, or transmit any personal information, data, or other sensitive material from the User. Any concerns or complaints regarding data usage or security should be directed to the respective manufacturer or provider of the shortcuts.
-Fictional Content Disclaimer
-All content contained within these shortcuts, unless explicitly stated otherwise, is entirely fictional. Any names, characters, organizations, locations, events, or other elements depicted are products of the creators' imagination or are used in a fictitious manner. Any similarities to actual persons (living or deceased), businesses, organizations, or events are purely coincidental.
-Intended Use and Prohibited Behavior
-These shortcuts are designed and intended solely for entertainment purposes. The Providers do not endorse or condone any illegal, harmful, unethical, or otherwise prohibited behavior. The User is expressly advised to refrain from engaging in any activities inspired or encouraged by the content within these shortcuts that may violate laws, regulations, or ethical standards.
-Intellectual Property and Restrictions
-Unauthorized distribution, reproduction, or modification of these shortcuts, in whole or in part, is strictly prohibited. Any such actions may result in the User being banned from accessing the website, platform, or related services associated with these shortcuts and may subject the User to additional legal consequences.
-Indemnification and Limitation of Liability
-By using these shortcuts, the User agrees to indemnify, defend, and hold harmless the Providers from and against any and all claims, damages, liabilities, losses, costs, and expenses (including reasonable attorneys' fees) arising out of or related to the User's use or misuse of the shortcuts.
-By using these shortcuts, you confirm that you have read, understood, and agreed to the terms and conditions set forth above. If you do not agree to these terms, you are prohibited from using these shortcuts.
-</p>
+        <p>[Insert terms content here...]</p>
     </div>
+
+    <small class="small-footnote">Terms and Conditions do apply.</small>
 
     <script>
         function toggleAgreeButton() {
@@ -144,22 +134,12 @@ By using these shortcuts, you confirm that you have read, understood, and agreed
         function closeTerms() {
             document.getElementById("terms-box").style.display = "none";
         }
-        // Highlight the active page in the navbar
+
+        // Ensure terms popup shows on every page
         document.addEventListener("DOMContentLoaded", () => {
-            const links = document.querySelectorAll(".navbar");
-            const currentPage = window.location.pathname;
-    
-            links.forEach((link) => {
-                var url =  link.getAttribute("href").substring(28);
-                if (url == currentPage) {
-                    link.style.backgroundColor = "white";
-                    link.style.color = "#333"; // Adjust the text color for contrast
-                    link.style.borderRadius = "5px"; // Optional for a cleaner look
-                }
-            });
+            document.getElementById("overlay").style.display = "flex";
         });
     </script>
 
-<small>Terms and Conditions do Apply</small>
 </body>
 </html>
