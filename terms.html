@@ -4,7 +4,7 @@
     <link rel="icon" type="image/x-icon" href="ico.ico">
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Shortstop</title>
+    <title>Terms</title>
     <link href="https://fonts.googleapis.com/css2?family=Lexend:wght@300;400;600&display=swap" rel="stylesheet">
     <style>
         body {
@@ -32,48 +32,6 @@
             padding: 20px;
             text-align: center;
         }
-        .overlay {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: rgba(0,0,0,0.5);
-            display: flex;
-            justify-content: center;
-            align-items: center;
-        }
-        .popup {
-            background: white;
-            padding: 20px;
-            text-align: center;
-            
-            box-shadow: 0px 0px 10px rgba(0,0,0,0.3);
-            width: 300px;
-            border-radius: 8px;
-        }
-        .terms-box {
-            display: none;
-            position: fixed;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            background: white;
-            padding: 20px;
-            width: 400px;
-            max-height: 300px;
-            overflow-y: auto;
-            box-shadow: 0px 0px 10px rgba(0,0,0,0.3);
-            border-radius: 8px;
-        }
-        .close-btn {
-            background: rgba(0,0,0,0.5);
-            color: white;
-            border: none;
-            padding: 5px 10px;
-            cursor: pointer;
-            float: right;
-        }
         .footnote {
             position: fixed;
             bottom: 10px;
@@ -99,29 +57,12 @@
         <a href="#">Wiki</a>
         <a href="#">Bans</a>
         <a href="#">Employees</a>
-        <a href="#">Terms</a>
+        <a href="terms.html">Terms</a>
     </div>
 
     <div class="content">
-        <h1>Welcome to Shortstop</h1>
-        <p>The largest collection of shortcuts.</p>
-    </div>
-
-    <div class="overlay" id="overlay">
-        <div class="popup">
-            <p>Do you agree to our <a href="#" onclick="showTerms()" style="font-size: 0.9em;">terms and services</a>?</p>
-            <input type="checkbox" id="acceptTerms" onclick="toggleAgreeButton()"> I have read and agree to the terms
-            <br><br>
-            <button id="agreeButton" onclick="agreeTerms()" disabled>I Agree</button>
-        </div>
-    </div>
-
-    <div class="terms-box" id="terms-box">
-        <button class="close-btn" onclick="closeTerms()">X</button>
-        <h3>Terms and Services</h3>
-        <p>By checking the box, you (the "User") expressly acknowledge and agree to the following:
-
-Device Liability Acknowledgment
+        <h1>Terms of Service</h1>
+        <p>Device Liability Acknowledgment
 The use of these shortcuts may result in temporary disruptions, malfunctions, or damage to your iPad or other compatible devices (collectively referred to as the "Device"). The creators, developers, and manufacturers of these shortcuts (the "Providers") disclaim all liability for any such issues or damages. The User assumes full responsibility for addressing any problems that may arise. In most cases, such issues can be resolved by performing a hard reset of the Device (e.g., holding the power and home buttons simultaneously for a duration of at least 15 seconds). If the issue persists, the User is advised to contact the relevant manufacturer or service provider for additional assistance.
 Prohibited Use in Academic and Similar Settings
 The use of these shortcuts during classroom instruction, examinations, or other educational or professional settings is discouraged. The Providers disclaim all responsibility for any consequences, including but not limited to disciplinary actions or penalties imposed by educational institutions, organizations, or employers, arising from the User’s use of these shortcuts in such contexts.
@@ -135,29 +76,13 @@ Intellectual Property and Restrictions
 Unauthorized distribution, reproduction, or modification of these shortcuts, in whole or in part, is strictly prohibited. Any such actions may result in the User being banned from accessing the website, platform, or related services associated with these shortcuts and may subject the User to additional legal consequences.
 Indemnification and Limitation of Liability
 By using these shortcuts, the User agrees to indemnify, defend, and hold harmless the Providers from and against any and all claims, damages, liabilities, losses, costs, and expenses (including reasonable attorneys' fees) arising out of or related to the User's use or misuse of the shortcuts.
-By using these shortcuts, you confirm that you have read, understood, and agreed to the terms and conditions set forth above. If you do not agree to these terms, you are prohibited from using these shortcuts.
+By using these shortcuts, you confirm that you have read, understood, and agreed to the terms and conditions set forth above. If you do not agree to these terms, you are prohibited from using these shortcuts.</p>
+ </div>
+
 </p>
     </div>
 
     <script>
-        function toggleAgreeButton() {
-            const checkbox = document.getElementById("acceptTerms");
-            const button = document.getElementById("agreeButton");
-            button.disabled = !checkbox.checked;
-        }
-
-        function agreeTerms() {
-            document.getElementById("overlay").style.display = "none";
-            document.body.style.overflow = "auto"; // Allow scrolling
-        }
-
-        function showTerms() {
-            document.getElementById("terms-box").style.display = "block";
-        }
-
-        function closeTerms() {
-            document.getElementById("terms-box").style.display = "none";
-        }
         // Highlight the active page in the navbar
         document.addEventListener("DOMContentLoaded", () => {
             const links = document.querySelectorAll(".navbar");
