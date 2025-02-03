@@ -3,7 +3,7 @@ body {
     margin: 0;
     padding: 0;
     background: white;
-    overflow: hidden; /* Prevent scrolling while popup is active */
+    overflow: auto; /* Prevent scrolling while popup is active */
 }
 .navbar {
     background: #333;
