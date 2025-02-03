@@ -3,16 +3,13 @@ function toggleAgreeButton() {
     const button = document.getElementById("agreeButton");
     button.disabled = !checkbox.checked;
 }
-
 function agreeTerms() {
     document.getElementById("overlay").style.display = "none";
     document.body.style.overflow = "auto"; // Allow scrolling
 }
-
 function showTerms() {
     document.getElementById("terms-box").style.display = "block";
 }
-
 function closeTerms() {
     document.getElementById("terms-box").style.display = "none";
 }
