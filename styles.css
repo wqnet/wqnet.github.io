@@ -24,6 +24,10 @@ body {
     padding: 20px;
     text-align: center;
 }
+.content terms{
+    padding: 20px;
+    text-align: left;
+}
 .overlay {
     position: fixed;
     top: 0;
