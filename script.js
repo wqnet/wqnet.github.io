@@ -27,3 +27,30 @@ document.addEventListener("DOMContentLoaded", () => {
         }
     });
 });
+// Track mouse movement and apply a 3D rotation effect
+const shortcutCards = document.querySelectorAll('.shortcut-card');
+
+shortcutCards.forEach(card => {
+  card.addEventListener('mousemove', (e) => {
+    const { offsetWidth: width, offsetHeight: height } = card;
+    let { offsetX: x, offsetY: y } = e;
+
+    // Adjust mouse position relative to the card
+    if (x <= 0 || x >= width || y <= 0 || y >= height) return;
+
+    // Calculate rotation values
+    const rotateX = ((y / height) - 0.5) * 20; // Rotate based on Y axis
+    const rotateY = ((x / width) - 0.5) * -20; // Rotate based on X axis
+
+    // Apply the transformation to create the 3D effect
+    card.style.transform = `rotateX(${rotateX}deg) rotateY(${rotateY}deg)`;
+    card.classList.add('active');
+  });
+
+  // Reset on mouse leave
+  card.addEventListener('mouseleave', () => {
+    card.style.transform = 'rotateX(0deg) rotateY(0deg)';
+    card.classList.remove('active');
+  });
+});
+
