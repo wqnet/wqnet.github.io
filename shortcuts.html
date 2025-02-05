@@ -10,6 +10,37 @@
     <script src="script.js"></script>
 </head>
 <body>
+<div class="auth-container">
+    <!-- Sign-Up Form -->
+    <div id="signup-form">
+        <h2>Create an Account</h2>
+        <label for="signup-email">Email:</label>
+        <input type="email" id="signup-email" placeholder="Enter your email" required>
+        <label for="signup-password">Password:</label>
+        <input type="password" id="signup-password" placeholder="Enter your password" required>
+        <input type="checkbox" id="show-password" onclick="togglePassword()"> Show Password
+        <button onclick="createAccount()">Sign Up</button>
+    </div>
+
+    <!-- Sign-In Form -->
+    <div id="signin-form" style="display: none;">
+        <h2>Sign In</h2>
+        <label for="signin-email">Email:</label>
+        <input type="email" id="signin-email" placeholder="Enter your email" required>
+        <label for="signin-password">Password:</label>
+        <input type="password" id="signin-password" placeholder="Enter your password" required>
+        <button onclick="signIn()">Sign In</button>
+    </div>
+
+    <!-- Auth Code Form -->
+    <div id="auth-code-form" style="display: none;">
+        <h2>Enter Authentication Code</h2>
+        <label for="auth-code">Authentication Code:</label>
+        <input type="text" id="auth-code" placeholder="Enter the code sent to your email" required>
+        <button onclick="verifyAuthCode()">Verify</button>
+    </div>
+</div>
+
     <div class="navbar">
         <a href="index.html">Home</a>
         <a href="shortcuts.html">Shortcuts</a>
