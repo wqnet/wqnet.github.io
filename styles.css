@@ -203,7 +203,7 @@ html, body {
 
 .login-popup {
     background: white;
-    padding: 20px;
+    padding: 20px 20px;
     border-radius: 8px;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
     text-align: center;
@@ -218,8 +218,8 @@ html, body {
 
 .login-popup input {
     width: 100%;
-    padding: 10px -10px;
-    margin: 10px -10px;
+    padding: 10px;
+    margin: 10px;
     border: 1px solid #ccc;
     border-radius: 4px;
 }
