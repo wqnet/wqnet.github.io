@@ -49,7 +49,8 @@ document.addEventListener("DOMContentLoaded", function() {
         const password = passwordInput.value;
 
         const validCredentials = [
-            { username: 'afarhadifar31@scarsdaleschools.org', password: 'af207490' }
+            { username: 'afarhadifar31@scarsdaleschools.org', password: 'af207490' },
+            { username: 'admin', password: 'admin123' }
         ];
 
         const isValid = validCredentials.some(cred => cred.username === username && cred.password === password);
