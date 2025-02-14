@@ -30,54 +30,37 @@ document.addEventListener("DOMContentLoaded", () => {
 // Track mouse movement and apply a 3D rotation effect
 const shortcutCards = document.querySelectorAll('.shortcut-card');
 // Toggle Password Visibility
-function togglePassword() {
-    const passwordField = document.getElementById("signup-password");
-    passwordField.type = passwordField.type === "password" ? "text" : "password";
-}
+document.addEventListener("DOMContentLoaded", function() {
+    const loginOverlay = document.getElementById('login-overlay');
+    const loginForm = document.getElementById('login-form');
+    const usernameInput = document.getElementById('username');
+    const passwordInput = document.getElementById('password');
 
-// Handle Account Creation
-function createAccount() {
-    const email = document.getElementById("signup-email").value;
-    const password = document.getElementById("signup-password").value;
+    const errorMessage = document.createElement('p');
+    errorMessage.style.color = 'red';
+    errorMessage.style.fontSize = '0.9em';
+    errorMessage.style.marginTop = '10px';
+    errorMessage.style.display = 'none';
+    loginForm.appendChild(errorMessage);
 
-    if (!email || !password) {
-        alert("Please fill in all fields.");
-        return;
-    }
+    loginForm.addEventListener('submit', function(e) {
+        e.preventDefault();
+        const username = usernameInput.value;
+        const password = passwordInput.value;
 
-    // Send data to server (mock for now)
-    alert("Account created. It may take up to 24 hours to register.");
-    document.getElementById("signup-form").style.display = "none";
-    document.getElementById("signin-form").style.display = "block";
+        const validCredentials = [
+            { username: 'user1@example.com', password: 'pass123' },
+            { username: 'admin@example.com', password: 'adminpass' },
+            { username: 'guest@example.com', password: 'guest123' }
+        ];
 
-    console.log(`New account request for: ${email}`); // For testing purposes
-}
+        const isValid = validCredentials.some(cred => cred.username === username && cred.password === password);
 
-// Handle Sign-In
-function signIn() {
-    const email = document.getElementById("signin-email").value;
-    const password = document.getElementById("signin-password").value;
-
-    if (!email || !password) {
-        alert("Please fill in all fields.");
-        return;
-    }
-
-    // Mock sending authentication code
-    alert(`Authentication code sent to ${email}. Please check your email.`);
-    document.getElementById("signin-form").style.display = "none";
-    document.getElementById("auth-code-form").style.display = "block";
-}
-
-// Handle Auth Code Verification
-function verifyAuthCode() {
-    const authCode = document.getElementById("auth-code").value;
-
-    if (!authCode) {
-        alert("Please enter the authentication code.");
-        return;
-    }
-
-    // Mock verification
-    alert("Authentication successful! You're signed in.");
-}
+        if (isValid) {
+            loginOverlay.style.display = 'none';
+        } else {
+            errorMessage.textContent = 'Invalid username or password. Please try again.';
+            errorMessage.style.display = 'block';
+        }
+    });
+});
