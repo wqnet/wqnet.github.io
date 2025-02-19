@@ -238,18 +238,4 @@ html, body {
 .login-popup button:hover {
     background: #0056b3;
 }
-.login-popup a {
-    width: 100%;
-    padding: 10px;
-    background: #007bff;
-    color: white;
-    border: none;
-    border-radius: 4px;
-    cursor: pointer;
-    padding: 5px 5px 5px 5px;
-}
-
-.login-popup a:hover {
-    background: #0056b3;
-}
 
