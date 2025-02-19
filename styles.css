@@ -227,7 +227,7 @@ html, body {
 .login-popup button {
     width: 100%;
     padding: 10px;
-    background: #4CAF50;
+    background: #007bff;
     color: white;
     border: none;
     border-radius: 4px;
@@ -235,5 +235,5 @@ html, body {
 }
 
 .login-popup button:hover {
-    background: #45a049;
+    background: #0056b3;
 }
