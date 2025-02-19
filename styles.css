@@ -232,6 +232,7 @@ html, body {
     border: none;
     border-radius: 4px;
     cursor: pointer;
+    padding: 5px 5px 5px 5px;
 }
 
 .login-popup button:hover {
