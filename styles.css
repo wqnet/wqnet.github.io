@@ -238,7 +238,6 @@ html, body {
 .login-popup button:hover {
     background: #0056b3;
 }
-
 .tabs { display: flex; }
 .tab-button {
     padding: 10px 20px;
