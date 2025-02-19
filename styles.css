@@ -239,3 +239,14 @@ html, body {
     background: #0056b3;
 }
 
+.tabs { display: flex; }
+.tab-button {
+    padding: 10px 20px;
+    cursor: pointer;
+    border: 1px solid #ccc;
+    background: #f4f4f4;
+    margin-right: 5px;
+}
+.tab-button.active { background: #ddd; }
+.tab-content { display: none; padding: 15px; border: 1px solid #ccc; }
+.tab-content.active { display: block; }
