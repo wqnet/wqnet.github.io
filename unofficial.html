@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <link rel="icon" type="image/x-icon" href="ico.ico">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>UnofficialShortcuts</title>
+    <link href="https://fonts.googleapis.com/css2?family=Lexend:wght@300;400;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="styles.css">
+    <script src="script.js" defer></script>
+</head>
+<body>
+    <div id="login-overlay">
+        <div class="login-popup">
+            <h2>Login</h2>
+            <form id="login-form">
+                <input type="text" id="username" autocorrect="off" autocapitalize="none" placeholder="Username" required>
+                <input type="password" id="password" autocorrect="off" autocapitalize="none" placeholder="Password" required>
+                <button type="submit">Login</button>
+                <a href="https://forms.gle/y9ozwCpnUgicmTL29"><button type="button">Register</button></a>
+            </form>
+        </div>
+    </div>
+
+ 
+    <div class="navbar">
+        <a href="index.html">Home</a>
+        <a href="shortcuts.html">Shortcuts</a>
+        <a href="generic.html">Generic Gaming</a>
+        <a href="unofficial">Unofficial Shortcuts</a>
+        <a href="wiki.html">Wiki</a>
+        <a href="employees.html">Employees</a>
+        <a href="terms.html">Terms</a>
+    </div>
+    <div class="content">
+        <h1>Unofficial Shortcuts</h1>
+        <p>Utilities</p>
+    </div>
+    <div class="shortcut-container">
+        <div class="shortcut-card">
+            <div class="background" style="background-image: url('assets/qm.png');"></div>
+            <div class="content">
+                <a href="https://www.icloud.com/shortcuts/56edfd5e71b44b018c2bb7a662e2b8f0" download>Download</a>
+                <p>Generates a QR code using a provided link.</p>
+                <h3>Arvin</h3>
+            </div>
+        </div>
+    </div>
+    <div class="container">
+        <p class="footnote">Terms and conditions apply</p>
+    </div>
+    <div class="overlay" id="overlay">
+        <div class="popup">
+            <p>Do you agree to our <a href="#" onclick="showTerms()" style="font-size: 0.9em;">terms</a>?</p>
+            <input type="checkbox" id="acceptTerms" onclick="toggleAgreeButton()"> I confirm that I am over 13 and I have read and agree to the terms
+            <br><br>
+            <button id="agreeButton" onclick="agreeTerms()" disabled>I Agree</button>
+        </div>
+    </div>
+    <div class="terms-box" id="terms-box">
+        <button class="close-btn" onclick="closeTerms()">X</button>
+        <h3>Terms</h3>
+        <p>By checking the box, you (the "User") expressly acknowledge and agree to the following:
+        <br>Device Liability Acknowledgment
+        <br>The use of these shortcuts may result in temporary disruptions, malfunctions, or damage to your iPad or other compatible devices (collectively referred to as the "Device"). The creators, developers, and manufacturers of these shortcuts (the "Providers") disclaim all liability for any such issues or damages. The User assumes full responsibility for addressing any problems that may arise. In most cases, such issues can be resolved by performing a hard reset of the Device (e.g., holding the power and home buttons simultaneously for a duration of at least 15 seconds). If the issue persists, the User is advised to contact the relevant manufacturer or service provider for additional assistance.
+        <br>Prohibited Use in Academic and Similar Settings
+        <br>The use of these shortcuts during classroom instruction, examinations, or other educational or professional settings is discouraged. The Providers disclaim all responsibility for any consequences, including but not limited to disciplinary actions or penalties imposed by educational institutions, organizations, or employers, arising from the User’s use of these shortcuts in such contexts.
+        <br>Data Privacy and Collection
+        <br>These shortcuts do not collect, store, or transmit any personal information, data, or other sensitive material from the User. Any concerns or complaints regarding data usage or security should be directed to the respective manufacturer or provider of the shortcuts.
+        <br>Fictional Content Disclaimer
+        <br>All content contained within these shortcuts, unless explicitly stated otherwise, is entirely fictional. Any names, characters, organizations, locations, events, or other elements depicted are products of the creators' imagination or are used in a fictitious manner. Any similarities to actual persons (living or deceased), businesses, organizations, or events are purely coincidental.
+        <br>Intended Use and Prohibited Behavior
+        <br>These shortcuts are designed and intended solely for entertainment purposes. The Providers do not endorse or condone any illegal, harmful, unethical, or otherwise prohibited behavior. The User is expressly advised to refrain from engaging in any activities inspired or encouraged by the content within these shortcuts that may violate laws, regulations, or ethical standards.
+        <br>Intellectual Property and Restrictions
+        <br>Unauthorized distribution, reproduction, or modification of these shortcuts, in whole or in part, is strictly prohibited. Any such actions may result in the User being banned from accessing the website, platform, or related services associated with these shortcuts and may subject the User to additional legal consequences.
+        <br>Indemnification and Limitation of Liability
+        <br>By using these shortcuts, the User agrees to indemnify, defend, and hold harmless the Providers from and against any and all claims, damages, liabilities, losses, costs, and expenses (including reasonable attorneys' fees) arising out of or related to the User's use or misuse of the shortcuts.
+        <br>By using these shortcuts, you confirm that you have read, understood, and agreed to the terms and conditions set forth above. If you do not agree to these terms, you are prohibited from using these shortcuts.
+        </p>
+    </div>
+</body>
+</html>
