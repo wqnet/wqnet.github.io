@@ -31,6 +31,7 @@ html, body {
     position: relative; /* Makes the container the reference point */
     height: 15px; /* Example height for the container */
     border: 0px solid #ccc; /* Optional: to visualize the container */
+    padding: 10px 10px 10px 10px;
 }
 .footnote {
     position: absolute; /* Positions the footnote relative to the container */
