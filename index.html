@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Parallax Example</title>
+    <style>
+        body {
+            margin: 0;
+            overflow: hidden;
+        }
+        #scene {
+            width: 100vw;
+            height: 100vh;
+        }
+        .layer img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+    </style>
+</head>
+<body>
+
+<div id="scene">
+    <div class="layer" data-depth="0.2">
+        <img src="m.png" alt="Parallax Image">
+    </div>
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/parallax/3.1.0/parallax.min.js"></script>
+<script>
+    var scene = document.getElementById('scene');
+    var parallaxInstance = new Parallax(scene);
+</script>
+
+</body>
+</html>
