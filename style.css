@@ -82,18 +82,8 @@ p {
 }
 
 /* General Styles */
-body {
-  font-family: Arial, sans-serif;
-  background-color: #f4f4f9;
-  color: #333;
-  margin: 0;
-  padding: 0;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  height: 100vh;
-}
 /*Base*/
+/* General Styles */
 .container {
   background-color: #fff;
   padding: 20px;
@@ -131,15 +121,21 @@ textarea {
   resize: vertical;
 }
 
-.buttons {
+.controls {
   display: flex;
-  flex-wrap: wrap;
+  flex-direction: column;
   gap: 10px;
   margin-bottom: 15px;
 }
 
+select {
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  font-size: 14px;
+}
+
 button {
-  flex: 1 1 calc(33.333% - 10px);
   padding: 10px;
   border: none;
   border-radius: 4px;
