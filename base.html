@@ -3,21 +3,29 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Base64 Encoder & Decoder</title>
-  <link rel="stylesheet" href="style.css">
+  <title>Hex, Base64, and Binary Converter</title>
+  <link rel="stylesheet" href="styles.css">
 </head>
 <body>
   <div class="container">
-    <h1>Base64 Encoder & Decoder</h1>
+    <h1>Hex, Base64, and Binary Converter</h1>
     <div class="tool">
       <label for="input">Enter Text:</label>
       <textarea id="input" placeholder="Type or paste your text here..."></textarea>
       <div class="buttons">
-        <button id="encodeBtn">Encode to Base64</button>
-        <button id="decodeBtn">Decode from Base64</button>
+        <button id="encodeBase64Btn">Encode to Base64</button>
+        <button id="decodeBase64Btn">Decode from Base64</button>
+        <button id="encodeHexBtn">Encode to Hex</button>
+        <button id="decodeHexBtn">Decode from Hex</button>
+        <button id="encodeBinaryBtn">Encode to Binary</button>
+        <button id="decodeBinaryBtn">Decode from Binary</button>
       </div>
       <label for="output">Result:</label>
       <textarea id="output" readonly placeholder="Your result will appear here..."></textarea>
+      <div class="action-buttons">
+        <button id="copyBtn">Copy to Clipboard</button>
+        <button id="clearBtn">Clear</button>
+      </div>
     </div>
   </div>
   <script src="scripts.js"></script>
