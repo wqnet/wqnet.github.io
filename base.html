@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Hex, Base64, and Binary Converter</title>
-  <link rel="stylesheet" href="styles.css">
+  <link rel="stylesheet" href="style.css">
 </head>
 <body>
   <div class="container">
@@ -12,16 +12,23 @@
     <div class="tool">
       <label for="input">Enter Text:</label>
       <textarea id="input" placeholder="Type or paste your text here..."></textarea>
-      <div class="buttons">
-        <button id="encodeBase64Btn">Encode to Base64</button>
-        <button id="decodeBase64Btn">Decode from Base64</button>
-        <button id="encodeHexBtn">Encode to Hex</button>
-        <button id="decodeHexBtn">Decode from Hex</button>
-        <button id="encodeBinaryBtn">Encode to Binary</button>
-        <button id="decodeBinaryBtn">Decode from Binary</button>
+      
+      <div class="controls">
+        <label for="encodingType">Choose Encoding/Decoding:</label>
+        <select id="encodingType">
+          <option value="base64Encode">Encode to Base64</option>
+          <option value="base64Decode">Decode from Base64</option>
+          <option value="hexEncode">Encode to Hex</option>
+          <option value="hexDecode">Decode from Hex</option>
+          <option value="binaryEncode">Encode to Binary</option>
+          <option value="binaryDecode">Decode from Binary</option>
+        </select>
+        <button id="convertBtn">Convert</button>
       </div>
+
       <label for="output">Result:</label>
       <textarea id="output" readonly placeholder="Your result will appear here..."></textarea>
+      
       <div class="action-buttons">
         <button id="copyBtn">Copy to Clipboard</button>
         <button id="clearBtn">Clear</button>
