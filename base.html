@@ -4,7 +4,95 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Hex, Base64, and Binary Converter</title>
-  <link rel="stylesheet" href="style.css">
+  <style>
+    /* General Styles */
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #f4f4f9;
+      color: #333;
+      margin: 0;
+      padding: 0;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+    }
+
+    .container {
+      background-color: #fff;
+      padding: 20px;
+      border-radius: 8px;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+      width: 500px;
+      text-align: center;
+    }
+
+    h1 {
+      margin-bottom: 20px;
+      font-size: 24px;
+      color: #444;
+    }
+
+    .tool {
+      display: flex;
+      flex-direction: column;
+    }
+
+    label {
+      font-weight: bold;
+      margin-bottom: 8px;
+      text-align: left;
+    }
+
+    textarea {
+      width: 100%;
+      height: 100px;
+      padding: 10px;
+      border: 1px solid #ccc;
+      border-radius: 4px;
+      margin-bottom: 15px;
+      font-size: 14px;
+      resize: vertical;
+    }
+
+    .controls {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      margin-bottom: 15px;
+    }
+
+    select {
+      padding: 10px;
+      border: 1px solid #ccc;
+      border-radius: 4px;
+      font-size: 14px;
+    }
+
+    button {
+      padding: 10px;
+      border: none;
+      border-radius: 4px;
+      background-color: #007bff;
+      color: #fff;
+      font-size: 14px;
+      cursor: pointer;
+      transition: background-color 0.3s ease;
+    }
+
+    button:hover {
+      background-color: #0056b3;
+    }
+
+    .action-buttons {
+      display: flex;
+      gap: 10px;
+    }
+
+    #output {
+      background-color: #f9f9f9;
+    }
+  </style>
 </head>
 <body>
   <div class="container">
@@ -35,6 +123,83 @@
       </div>
     </div>
   </div>
-  <script src="scripts.js"></script>
+
+  <script>
+    // Get DOM elements
+    const input = document.getElementById('input');
+    const output = document.getElementById('output');
+    const encodingType = document.getElementById('encodingType');
+    const convertBtn = document.getElementById('convertBtn');
+    const copyBtn = document.getElementById('copyBtn');
+    const clearBtn = document.getElementById('clearBtn');
+
+    // Conversion logic
+    convertBtn.addEventListener('click', () => {
+      const text = input.value;
+      const selectedOption = encodingType.value;
+
+      if (!text) {
+        alert('Please enter some text to convert.');
+        return;
+      }
+
+      try {
+        let result = '';
+        switch (selectedOption) {
+          case 'base64Encode':
+            result = btoa(text);
+            break;
+          case 'base64Decode':
+            result = atob(text);
+            break;
+          case 'hexEncode':
+            result = Array.from(text)
+              .map((char) => char.charCodeAt(0).toString(16))
+              .join('');
+            break;
+          case 'hexDecode':
+            result = text
+              .split(/(\w\w)/g)
+              .filter((pair) => pair)
+              .map((pair) => String.fromCharCode(parseInt(pair, 16)))
+              .join('');
+            break;
+          case 'binaryEncode':
+            result = Array.from(text)
+              .map((char) => char.charCodeAt(0).toString(2).padStart(8, '0'))
+              .join(' ');
+            break;
+          case 'binaryDecode':
+            result = text
+              .split(' ')
+              .map((binary) => String.fromCharCode(parseInt(binary, 2)))
+              .join('');
+            break;
+          default:
+            result = 'Invalid option selected.';
+        }
+        output.value = result;
+      } catch (e) {
+        alert('Invalid input for the selected operation. Please check your text.');
+      }
+    });
+
+    // Copy to Clipboard
+    copyBtn.addEventListener('click', () => {
+      if (output.value) {
+        output.select();
+        document.execCommand('copy');
+        alert('Copied to clipboard!');
+      } else {
+        alert('No result to copy.');
+      }
+    });
+
+    // Clear Input and Output
+    clearBtn.addEventListener('click', () => {
+      input.value = '';
+      output.value = '';
+    });
+  </script>
 </body>
 </html>
