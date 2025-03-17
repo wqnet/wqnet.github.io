@@ -1,98 +1,59 @@
 // Get DOM elements
 const input = document.getElementById('input');
 const output = document.getElementById('output');
-const encodeBase64Btn = document.getElementById('encodeBase64Btn');
-const decodeBase64Btn = document.getElementById('decodeBase64Btn');
-const encodeHexBtn = document.getElementById('encodeHexBtn');
-const decodeHexBtn = document.getElementById('decodeHexBtn');
-const encodeBinaryBtn = document.getElementById('encodeBinaryBtn');
-const decodeBinaryBtn = document.getElementById('decodeBinaryBtn');
+const encodingType = document.getElementById('encodingType');
+const convertBtn = document.getElementById('convertBtn');
 const copyBtn = document.getElementById('copyBtn');
 const clearBtn = document.getElementById('clearBtn');
 
-// Base64 Encoding and Decoding
-encodeBase64Btn.addEventListener('click', () => {
+// Conversion logic
+convertBtn.addEventListener('click', () => {
   const text = input.value;
-  if (text) {
-    const encodedText = btoa(text);
-    output.value = encodedText;
-  } else {
-    alert('Please enter some text to encode.');
-  }
-});
+  const selectedOption = encodingType.value;
 
-decodeBase64Btn.addEventListener('click', () => {
-  const text = input.value;
-  if (text) {
-    try {
-      const decodedText = atob(text);
-      output.value = decodedText;
-    } catch (e) {
-      alert('Invalid Base64 input. Please check your text.');
+  if (!text) {
+    alert('Please enter some text to convert.');
+    return;
+  }
+
+  try {
+    let result = '';
+    switch (selectedOption) {
+      case 'base64Encode':
+        result = btoa(text);
+        break;
+      case 'base64Decode':
+        result = atob(text);
+        break;
+      case 'hexEncode':
+        result = Array.from(text)
+          .map((char) => char.charCodeAt(0).toString(16))
+          .join('');
+        break;
+      case 'hexDecode':
+        result = text
+          .split(/(\w\w)/g)
+          .filter((pair) => pair)
+          .map((pair) => String.fromCharCode(parseInt(pair, 16)))
+          .join('');
+        break;
+      case 'binaryEncode':
+        result = Array.from(text)
+          .map((char) => char.charCodeAt(0).toString(2).padStart(8, '0'))
+          .join(' ');
+        break;
+      case 'binaryDecode':
+        result = text
+          .split(' ')
+          .map((binary) => String.fromCharCode(parseInt(binary, 2)))
+          .join('');
+        break;
+      default:
+        result = 'Invalid option selected.';
     }
-  } else {
-    alert('Please enter some text to decode.');
-  }
-});
-
-// Hex Encoding and Decoding
-encodeHexBtn.addEventListener('click', () => {
-  const text = input.value;
-  if (text) {
-    const hexText = Array.from(text)
-      .map((char) => char.charCodeAt(0).toString(16))
-      .join('');
-    output.value = hexText;
-  } else {
-    alert('Please enter some text to encode.');
-  }
-});
-
-decodeHexBtn.addEventListener('click', () => {
-  const text = input.value;
-  if (text) {
-    try {
-      const decodedText = text
-        .split(/(\w\w)/g)
-        .filter((pair) => pair)
-        .map((pair) => String.fromCharCode(parseInt(pair, 16)))
-        .join('');
-      output.value = decodedText;
-    } catch (e) {
-      alert('Invalid Hex input. Please check your text.');
-    }
-  } else {
-    alert('Please enter some text to decode.');
-  }
-});
-
-// Binary Encoding and Decoding
-encodeBinaryBtn.addEventListener('click', () => {
-  const text = input.value;
-  if (text) {
-    const binaryText = Array.from(text)
-      .map((char) => char.charCodeAt(0).toString(2).padStart(8, '0'))
-      .join(' ');
-    output.value = binaryText;
-  } else {
-    alert('Please enter some text to encode.');
-  }
-});
-
-decodeBinaryBtn.addEventListener('click', () => {
-  const text = input.value;
-  if (text) {
-    try {
-      const decodedText = text
-        .split(' ')
-        .map((binary) => String.fromCharCode(parseInt(binary, 2)))
-        .join('');
-      output.value = decodedText;
-    } catch (e) {
-      alert('Invalid Binary input. Please check your text.');
-    }
-  } else {
-    alert('Please enter some text to decode.');
+    output.value = result;
+  } catch (e) {
+    alert('Invalid input for the selected operation. Please check your text.');
   }
 });
 
