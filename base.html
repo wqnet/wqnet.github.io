@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Really Bad Encoder/Decoder</title>
+  <title>File & Text Encoder/Decoder</title>
   <style>
     /* General Styles */
     body {
@@ -146,14 +146,14 @@
 </head>
 <body>
   <div class="container">
-    <h1>Really Bad Encoder/Decoder</h1>
+    <h1>File & Text Encoder/Decoder</h1>
     <div class="tool">
       <label for="input">Enter Text or Upload File:</label>
       <textarea id="input" placeholder="Type or paste your text here..."></textarea>
       
       <div class="file-upload">
         <input type="file" id="fileInput" />
-        <label for="fileInput">Choose File</label>
+        <label for="fileInput">Choose File (Encodes twice for some reason someone please help me)</label>
       </div>
 
       <div class="controls">
@@ -191,6 +191,8 @@
     const clearBtn = document.getElementById('clearBtn');
     const outputContainer = document.getElementById('outputContainer');
 
+    let fileData = null; // Store the uploaded file data
+
     // Handle file upload
     fileInput.addEventListener('change', (event) => {
       const file = event.target.files[0];
@@ -198,8 +200,8 @@
         const reader = new FileReader();
         reader.onload = (e) => {
           // Store the file data as a base64 string
-          const base64Data = e.target.result.split(',')[1];
-          input.value = base64Data; // Set the input to the base64 data
+          fileData = e.target.result.split(',')[1];
+          input.value = ''; // Clear the input field
         };
         reader.readAsDataURL(file); // Read the file as a data URL
       }
@@ -207,27 +209,28 @@
 
     // Encode function
     encodeBtn.addEventListener('click', () => {
-      const text = input.value;
       const selectedType = encodingType.value;
 
-      if (!text) {
+      if (!fileData && !input.value) {
         alert('Please enter some text or upload a file.');
         return;
       }
 
       try {
         let result = '';
+        const data = fileData || input.value; // Use file data if available, otherwise use input text
+
         switch (selectedType) {
           case 'base64':
-            result = btoa(text);
+            result = btoa(data);
             break;
           case 'hex':
-            result = Array.from(text)
+            result = Array.from(data)
               .map((char) => char.charCodeAt(0).toString(16))
               .join('');
             break;
           case 'binary':
-            result = Array.from(text)
+            result = Array.from(data)
               .map((char) => char.charCodeAt(0).toString(2).padStart(8, '0'))
               .join(' ');
             break;
@@ -243,8 +246,8 @@
 
     // Decode function
     decodeBtn.addEventListener('click', () => {
-      const text = input.value;
       const selectedType = encodingType.value;
+      const text = input.value;
 
       if (!text) {
         alert('Please enter some text or upload a file.');
@@ -343,6 +346,7 @@
       input.value = '';
       output.value = '';
       fileInput.value = '';
+      fileData = null; // Clear file data
       outputContainer.innerHTML = '';
     });
   </script>
