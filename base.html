@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>File & Text Encoder/Decoder</title>
+  <title>Really Bad Encoder/Decoder</title>
   <style>
     /* General Styles */
     body {
@@ -92,6 +92,13 @@
 
     #output {
       background-color: #f9f9f9;
+      width: 95%;
+      padding: 10px;
+      border: 1px solid #ccc;
+      border-radius: 4px;
+      margin-bottom: 15px;
+      font-size: 14px;
+      resize: vertical;
     }
 
     .file-upload {
@@ -114,11 +121,32 @@
     .file-upload label:hover {
       background-color: #0056b3;
     }
+
+    .output-container {
+      margin-top: 15px;
+    }
+
+    .output-container img {
+      max-width: 100%;
+      height: auto;
+      border-radius: 4px;
+    }
+
+    .download-link {
+      display: block;
+      margin-top: 10px;
+      color: #007bff;
+      text-decoration: none;
+    }
+
+    .download-link:hover {
+      text-decoration: underline;
+    }
   </style>
 </head>
 <body>
   <div class="container">
-    <h1>File & Text Encoder/Decoder</h1>
+    <h1>Really Bad Encoder/Decoder</h1>
     <div class="tool">
       <label for="input">Enter Text or Upload File:</label>
       <textarea id="input" placeholder="Type or paste your text here..."></textarea>
@@ -146,6 +174,8 @@
 
       <label for="output">Result:</label>
       <textarea id="output" readonly placeholder="Your result will appear here..."></textarea>
+
+      <div class="output-container" id="outputContainer"></div>
     </div>
   </div>
 
@@ -159,6 +189,7 @@
     const decodeBtn = document.getElementById('decodeBtn');
     const copyBtn = document.getElementById('copyBtn');
     const clearBtn = document.getElementById('clearBtn');
+    const outputContainer = document.getElementById('outputContainer');
 
     // Handle file upload
     fileInput.addEventListener('change', (event) => {
@@ -204,6 +235,7 @@
             result = 'Invalid encoding type selected.';
         }
         output.value = result;
+        outputContainer.innerHTML = ''; // Clear output container
       } catch (e) {
         alert('Error during encoding. Please check your input.');
       }
@@ -241,11 +273,59 @@
           default:
             result = 'Invalid encoding type selected.';
         }
-        output.value = result;
+
+        // Check if the decoded result is a file (e.g., starts with a file signature)
+        if (selectedType === 'base64' && isFile(result)) {
+          const fileType = getFileType(result);
+          if (fileType === 'image') {
+            // Display the image
+            outputContainer.innerHTML = `<img src="data:image/png;base64,${text}" alt="Decoded Image" />`;
+            output.value = ''; // Clear text output
+          } else {
+            // Provide a download link for non-image files
+            const blob = base64ToBlob(text);
+            const url = URL.createObjectURL(blob);
+            outputContainer.innerHTML = `<a class="download-link" href="${url}" download="decoded-file">Download Decoded File</a>`;
+            output.value = ''; // Clear text output
+          }
+        } else {
+          output.value = result;
+          outputContainer.innerHTML = ''; // Clear output container
+        }
       } catch (e) {
         alert('Error during decoding. Please check your input.');
       }
     });
+
+    // Check if the decoded result is a file
+    function isFile(data) {
+      // Check for common file signatures (e.g., PNG, JPEG, PDF, etc.)
+      const signatures = {
+        PNG: '\x89PNG',
+        JPEG: '\xFF\xD8\xFF',
+        PDF: '%PDF',
+      };
+      return Object.values(signatures).some((signature) => data.startsWith(signature));
+    }
+
+    // Get the file type based on the decoded data
+    function getFileType(data) {
+      if (data.startsWith('\x89PNG') || data.startsWith('\xFF\xD8\xFF')) {
+        return 'image';
+      }
+      return 'other';
+    }
+
+    // Convert base64 to a Blob
+    function base64ToBlob(base64) {
+      const byteCharacters = atob(base64);
+      const byteNumbers = new Array(byteCharacters.length);
+      for (let i = 0; i < byteCharacters.length; i++) {
+        byteNumbers[i] = byteCharacters.charCodeAt(i);
+      }
+      const byteArray = new Uint8Array(byteNumbers);
+      return new Blob([byteArray], { type: 'application/octet-stream' });
+    }
 
     // Copy to Clipboard
     copyBtn.addEventListener('click', () => {
@@ -263,6 +343,7 @@
       input.value = '';
       output.value = '';
       fileInput.value = '';
+      outputContainer.innerHTML = '';
     });
   </script>
 </body>
