@@ -166,9 +166,11 @@
       if (file) {
         const reader = new FileReader();
         reader.onload = (e) => {
-          input.value = e.target.result;
+          // Store the file data as a base64 string
+          const base64Data = e.target.result.split(',')[1];
+          input.value = base64Data; // Set the input to the base64 data
         };
-        reader.readAsText(file);
+        reader.readAsDataURL(file); // Read the file as a data URL
       }
     });
 
