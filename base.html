@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Hex, Base64, and Binary Converter</title>
+  <title>File & Text Encoder/Decoder</title>
   <style>
     /* General Styles */
     body {
@@ -23,7 +23,7 @@
       padding: 20px;
       border-radius: 8px;
       box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-      width: 500px;
+      width: 600px;
       text-align: center;
     }
 
@@ -50,6 +50,7 @@
       padding: 10px;
       border: 1px solid #ccc;
       border-radius: 4px;
+      margin-bottom: 15px;
       font-size: 14px;
       resize: vertical;
     }
@@ -86,40 +87,65 @@
     .action-buttons {
       display: flex;
       gap: 10px;
+      margin-bottom: 15px;
     }
 
     #output {
       background-color: #f9f9f9;
     }
+
+    .file-upload {
+      margin-bottom: 15px;
+    }
+
+    .file-upload input {
+      display: none;
+    }
+
+    .file-upload label {
+      padding: 10px;
+      background-color: #007bff;
+      color: #fff;
+      border-radius: 4px;
+      cursor: pointer;
+      transition: background-color 0.3s ease;
+    }
+
+    .file-upload label:hover {
+      background-color: #0056b3;
+    }
   </style>
 </head>
 <body>
   <div class="container">
-    <h1>Hex, Base64, and Binary Converter</h1>
+    <h1>File & Text Encoder/Decoder</h1>
     <div class="tool">
-      <label for="input">Enter Text:</label>
+      <label for="input">Enter Text or Upload File:</label>
       <textarea id="input" placeholder="Type or paste your text here..."></textarea>
       
+      <div class="file-upload">
+        <input type="file" id="fileInput" />
+        <label for="fileInput">Choose File</label>
+      </div>
+
       <div class="controls">
-        <label for="encodingType">Choose Encoding/Decoding:</label>
+        <label for="encodingType">Choose Encoding Type:</label>
         <select id="encodingType">
-          <option value="base64Encode">Encode to Base64</option>
-          <option value="base64Decode">Decode from Base64</option>
-          <option value="hexEncode">Encode to Hex</option>
-          <option value="hexDecode">Decode from Hex</option>
-          <option value="binaryEncode">Encode to Binary</option>
-          <option value="binaryDecode">Decode from Binary</option>
+          <option value="base64">Base64</option>
+          <option value="hex">Hex</option>
+          <option value="binary">Binary</option>
         </select>
-        <button id="convertBtn">Convert</button>
+      </div>
+
+      <div class="action-buttons">
+        <button id="encodeBtn">Encode</button>
+        <button id="decodeBtn">Decode</button>
+        <button id="copyBtn">Copy to Clipboard</button>
+        <button id="clearBtn">Clear</button>
       </div>
 
       <label for="output">Result:</label>
       <textarea id="output" readonly placeholder="Your result will appear here..."></textarea>
-      
-      <div class="action-buttons">
-        <button id="copyBtn">Copy to Clipboard</button>
-        <button id="clearBtn">Clear</button>
-      </div>
     </div>
   </div>
 
@@ -127,59 +153,95 @@
     // Get DOM elements
     const input = document.getElementById('input');
     const output = document.getElementById('output');
+    const fileInput = document.getElementById('fileInput');
     const encodingType = document.getElementById('encodingType');
-    const convertBtn = document.getElementById('convertBtn');
+    const encodeBtn = document.getElementById('encodeBtn');
+    const decodeBtn = document.getElementById('decodeBtn');
     const copyBtn = document.getElementById('copyBtn');
     const clearBtn = document.getElementById('clearBtn');
 
-    // Conversion logic
-    convertBtn.addEventListener('click', () => {
+    // Handle file upload
+    fileInput.addEventListener('change', (event) => {
+      const file = event.target.files[0];
+      if (file) {
+        const reader = new FileReader();
+        reader.onload = (e) => {
+          input.value = e.target.result;
+        };
+        reader.readAsText(file);
+      }
+    });
+
+    // Encode function
+    encodeBtn.addEventListener('click', () => {
       const text = input.value;
-      const selectedOption = encodingType.value;
+      const selectedType = encodingType.value;
 
       if (!text) {
-        alert('Please enter some text to convert.');
+        alert('Please enter some text or upload a file.');
         return;
       }
 
       try {
         let result = '';
-        switch (selectedOption) {
-          case 'base64Encode':
+        switch (selectedType) {
+          case 'base64':
             result = btoa(text);
             break;
-          case 'base64Decode':
-            result = atob(text);
-            break;
-          case 'hexEncode':
+          case 'hex':
             result = Array.from(text)
               .map((char) => char.charCodeAt(0).toString(16))
               .join('');
             break;
-          case 'hexDecode':
+          case 'binary':
+            result = Array.from(text)
+              .map((char) => char.charCodeAt(0).toString(2).padStart(8, '0'))
+              .join(' ');
+            break;
+          default:
+            result = 'Invalid encoding type selected.';
+        }
+        output.value = result;
+      } catch (e) {
+        alert('Error during encoding. Please check your input.');
+      }
+    });
+
+    // Decode function
+    decodeBtn.addEventListener('click', () => {
+      const text = input.value;
+      const selectedType = encodingType.value;
+
+      if (!text) {
+        alert('Please enter some text or upload a file.');
+        return;
+      }
+
+      try {
+        let result = '';
+        switch (selectedType) {
+          case 'base64':
+            result = atob(text);
+            break;
+          case 'hex':
             result = text
               .split(/(\w\w)/g)
               .filter((pair) => pair)
               .map((pair) => String.fromCharCode(parseInt(pair, 16)))
               .join('');
             break;
-          case 'binaryEncode':
-            result = Array.from(text)
-              .map((char) => char.charCodeAt(0).toString(2).padStart(8, '0'))
-              .join(' ');
-            break;
-          case 'binaryDecode':
+          case 'binary':
             result = text
               .split(' ')
               .map((binary) => String.fromCharCode(parseInt(binary, 2)))
               .join('');
             break;
           default:
-            result = 'Invalid option selected.';
+            result = 'Invalid encoding type selected.';
         }
         output.value = result;
       } catch (e) {
-        alert('Invalid input for the selected operation. Please check your text.');
+        alert('Error during decoding. Please check your input.');
       }
     });
 
@@ -198,6 +260,7 @@
     clearBtn.addEventListener('click', () => {
       input.value = '';
       output.value = '';
+      fileInput.value = '';
     });
   </script>
 </body>
