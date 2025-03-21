@@ -47,8 +47,15 @@
       border-radius: 4px;
       cursor: pointer;
     }
+    button.delete {
+      background: #dc3545;
+    }
+    button.edit {
+      background: #ffc107;
+      color: #000;
+    }
     button:hover {
-      background: #218838;
+      opacity: 0.9;
     }
     .percentage {
       font-weight: bold;
@@ -99,12 +106,51 @@
       }
     }
 
+    function deleteClass(classIndex) {
+      if (confirm('Are you sure you want to delete this class and all its assignments?')) {
+        classes.splice(classIndex, 1);
+        saveData();
+        renderClasses();
+      }
+    }
+
+    function editClass(classIndex) {
+      const newName = prompt('Enter new class name:', classes[classIndex].name);
+      if (newName) {
+        classes[classIndex].name = newName;
+        saveData();
+        renderClasses();
+      }
+    }
+
     function addAssignment(classIndex) {
       const assignmentName = prompt('Enter assignment name:');
       const score = parseFloat(prompt('Enter your score:'));
       const total = parseFloat(prompt('Enter total score:'));
       if (assignmentName && !isNaN(score) && !isNaN(total)) {
         classes[classIndex].assignments.push({ name: assignmentName, score, total });
+        saveData();
+        renderClasses();
+      }
+    }
+
+    function deleteAssignment(classIndex, assignmentIndex) {
+      if (confirm('Are you sure you want to delete this assignment?')) {
+        classes[classIndex].assignments.splice(assignmentIndex, 1);
+        saveData();
+        renderClasses();
+      }
+    }
+
+    function editAssignment(classIndex, assignmentIndex) {
+      const assignment = classes[classIndex].assignments[assignmentIndex];
+      const newName = prompt('Enter new assignment name:', assignment.name);
+      const newScore = parseFloat(prompt('Enter new score:', assignment.score));
+      const newTotal = parseFloat(prompt('Enter new total score:', assignment.total));
+      if (newName && !isNaN(newScore) && !isNaN(newTotal)) {
+        assignment.name = newName;
+        assignment.score = newScore;
+        assignment.total = newTotal;
         saveData();
         renderClasses();
       }
@@ -124,6 +170,8 @@
         classDiv.className = 'class';
         classDiv.innerHTML = `
           <h2>${cls.name}</h2>
+          <button onclick="editClass(${classIndex})">Edit Class Name</button>
+          <button class="delete" onclick="deleteClass(${classIndex})">Delete Class</button>
           <button onclick="addAssignment(${classIndex})">Add Assignment</button>
           <div id="assignments-${classIndex}"></div>
           <p>Total Percentage: <span class="percentage">${calculatePercentage(cls.assignments)}%</span></p>
@@ -136,6 +184,8 @@
           assignmentDiv.className = 'assignment';
           assignmentDiv.innerHTML = `
             <p>${assignment.name}: ${assignment.score} / ${assignment.total}</p>
+            <button class="edit" onclick="editAssignment(${classIndex}, ${assignmentIndex})">Edit</button>
+            <button class="delete" onclick="deleteAssignment(${classIndex}, ${assignmentIndex})">Delete</button>
           `;
           assignmentsDiv.appendChild(assignmentDiv);
         });
