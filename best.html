@@ -31,6 +31,18 @@
       border-radius: 5px;
       background: #f9f9f9;
     }
+    .class-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      cursor: pointer;
+    }
+    .class-header h2 {
+      margin: 0;
+    }
+    .assignments {
+      margin-top: 10px;
+    }
     input[type="text"], input[type="number"] {
       padding: 8px;
       margin: 5px 0;
@@ -53,6 +65,10 @@
     button.edit {
       background: #ffc107;
       color: #000;
+    }
+    button.clear {
+      background: #dc3545;
+      margin-top: 20px;
     }
     button:hover {
       opacity: 0.9;
@@ -79,6 +95,7 @@
     <h1>Grade Tracker</h1>
     <div id="classes"></div>
     <button onclick="addClass()">Add Class</button>
+    <button class="clear" onclick="clearAllData()">Clear All Data</button>
 
     <div class="export-import">
       <h2>Save/Load Data</h2>
@@ -86,6 +103,8 @@
       <button onclick="importData()">Import Data</button>
       <textarea id="data-import" placeholder="Paste your data here to import"></textarea>
     </div>
+
+    <h2>Total Grade: <span id="total-grade" class="percentage">0%</span></h2>
   </div>
 
   <script>
@@ -95,12 +114,13 @@
     if (localStorage.getItem('gradeTrackerData')) {
       classes = JSON.parse(localStorage.getItem('gradeTrackerData'));
       renderClasses();
+      updateTotalGrade();
     }
 
     function addClass() {
       const className = prompt('Enter class name:');
       if (className) {
-        classes.push({ name: className, assignments: [] });
+        classes.push({ name: className, assignments: [], expanded: true });
         saveData();
         renderClasses();
       }
@@ -111,6 +131,7 @@
         classes.splice(classIndex, 1);
         saveData();
         renderClasses();
+        updateTotalGrade();
       }
     }
 
@@ -123,6 +144,11 @@
       }
     }
 
+    function toggleClass(classIndex) {
+      classes[classIndex].expanded = !classes[classIndex].expanded;
+      renderClasses();
+    }
+
     function addAssignment(classIndex) {
       const assignmentName = prompt('Enter assignment name:');
       const score = parseFloat(prompt('Enter your score:'));
@@ -131,6 +157,7 @@
         classes[classIndex].assignments.push({ name: assignmentName, score, total });
         saveData();
         renderClasses();
+        updateTotalGrade();
       }
     }
 
@@ -139,6 +166,7 @@
         classes[classIndex].assignments.splice(assignmentIndex, 1);
         saveData();
         renderClasses();
+        updateTotalGrade();
       }
     }
 
@@ -153,6 +181,7 @@
         assignment.total = newTotal;
         saveData();
         renderClasses();
+        updateTotalGrade();
       }
     }
 
@@ -162,6 +191,12 @@
       return totalPossible === 0 ? 0 : ((totalScore / totalPossible) * 100).toFixed(2);
     }
 
+    function updateTotalGrade() {
+      const allAssignments = classes.flatMap(cls => cls.assignments);
+      const totalPercentage = calculatePercentage(allAssignments);
+      document.getElementById('total-grade').textContent = `${totalPercentage}%`;
+    }
+
     function renderClasses() {
       const classesDiv = document.getElementById('classes');
       classesDiv.innerHTML = '';
@@ -169,31 +204,49 @@
         const classDiv = document.createElement('div');
         classDiv.className = 'class';
         classDiv.innerHTML = `
-          <h2>${cls.name}</h2>
-          <button onclick="editClass(${classIndex})">Edit Class Name</button>
-          <button class="delete" onclick="deleteClass(${classIndex})">Delete Class</button>
-          <button onclick="addAssignment(${classIndex})">Add Assignment</button>
-          <div id="assignments-${classIndex}"></div>
-          <p>Total Percentage: <span class="percentage">${calculatePercentage(cls.assignments)}%</span></p>
+          <div class="class-header" onclick="toggleClass(${classIndex})">
+            <h2>${cls.name}</h2>
+            <span>${cls.expanded ? '▼' : '▶'}</span>
+          </div>
+          ${cls.expanded ? `
+            <button onclick="editClass(${classIndex})">Edit Class Name</button>
+            <button class="delete" onclick="deleteClass(${classIndex})">Delete Class</button>
+            <button onclick="addAssignment(${classIndex})">Add Assignment</button>
+            <div class="assignments" id="assignments-${classIndex}"></div>
+            <p>Class Percentage: <span class="percentage">${calculatePercentage(cls.assignments)}%</span></p>
+          ` : ''}
         `;
         classesDiv.appendChild(classDiv);
 
-        const assignmentsDiv = document.getElementById(`assignments-${classIndex}`);
-        cls.assignments.forEach((assignment, assignmentIndex) => {
-          const assignmentDiv = document.createElement('div');
-          assignmentDiv.className = 'assignment';
-          assignmentDiv.innerHTML = `
-            <p>${assignment.name}: ${assignment.score} / ${assignment.total}</p>
-            <button class="edit" onclick="editAssignment(${classIndex}, ${assignmentIndex})">Edit</button>
-            <button class="delete" onclick="deleteAssignment(${classIndex}, ${assignmentIndex})">Delete</button>
-          `;
-          assignmentsDiv.appendChild(assignmentDiv);
-        });
+        if (cls.expanded) {
+          const assignmentsDiv = document.getElementById(`assignments-${classIndex}`);
+          cls.assignments.forEach((assignment, assignmentIndex) => {
+            const assignmentDiv = document.createElement('div');
+            assignmentDiv.className = 'assignment';
+            assignmentDiv.innerHTML = `
+              <p>${assignment.name}: ${assignment.score} / ${assignment.total}</p>
+              <button class="edit" onclick="editAssignment(${classIndex}, ${assignmentIndex})">Edit</button>
+              <button class="delete" onclick="deleteAssignment(${classIndex}, ${assignmentIndex})">Delete</button>
+            `;
+            assignmentsDiv.appendChild(assignmentDiv);
+          });
+        }
       });
     }
 
     function saveData() {
       localStorage.setItem('gradeTrackerData', JSON.stringify(classes));
+    }
+
+    function clearAllData() {
+      if (confirm('Are you sure you want to clear ALL data? This cannot be undone.')) {
+        if (confirm('This will delete ALL classes and assignments. Are you absolutely sure?')) {
+          classes = [];
+          saveData();
+          renderClasses();
+          updateTotalGrade();
+        }
+      }
     }
 
     function exportData() {
@@ -214,6 +267,7 @@
           classes = JSON.parse(data);
           saveData();
           renderClasses();
+          updateTotalGrade();
         } catch (e) {
           alert('Invalid data format.');
         }
