@@ -24,23 +24,23 @@
       border-radius: 8px;
       box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
     }
-    .class, .assignment {
+    .class, .section, .assignment {
       margin-bottom: 20px;
       padding: 15px;
       border: 1px solid #ddd;
       border-radius: 5px;
       background: #f9f9f9;
     }
-    .class-header {
+    .class-header, .section-header {
       display: flex;
       justify-content: space-between;
       align-items: center;
       cursor: pointer;
     }
-    .class-header h2 {
+    .class-header h2, .section-header h3 {
       margin: 0;
     }
-    .assignments {
+    .sections, .assignments {
       margin-top: 10px;
     }
     input[type="text"], input[type="number"] {
@@ -120,14 +120,23 @@
     function addClass() {
       const className = prompt('Enter class name:');
       if (className) {
-        classes.push({ name: className, assignments: [], expanded: true });
+        classes.push({ name: className, sections: [], expanded: true });
+        saveData();
+        renderClasses();
+      }
+    }
+
+    function addSection(classIndex) {
+      const sectionName = prompt('Enter section name:');
+      if (sectionName) {
+        classes[classIndex].sections.push({ name: sectionName, assignments: [], expanded: true });
         saveData();
         renderClasses();
       }
     }
 
     function deleteClass(classIndex) {
-      if (confirm('Are you sure you want to delete this class and all its assignments?')) {
+      if (confirm('Are you sure you want to delete this class and all its sections and assignments?')) {
         classes.splice(classIndex, 1);
         saveData();
         renderClasses();
@@ -149,29 +158,52 @@
       renderClasses();
     }
 
-    function addAssignment(classIndex) {
+    function toggleSection(classIndex, sectionIndex) {
+      classes[classIndex].sections[sectionIndex].expanded = !classes[classIndex].sections[sectionIndex].expanded;
+      renderClasses();
+    }
+
+    function deleteSection(classIndex, sectionIndex) {
+      if (confirm('Are you sure you want to delete this section and all its assignments?')) {
+        classes[classIndex].sections.splice(sectionIndex, 1);
+        saveData();
+        renderClasses();
+        updateTotalGrade();
+      }
+    }
+
+    function editSection(classIndex, sectionIndex) {
+      const newName = prompt('Enter new section name:', classes[classIndex].sections[sectionIndex].name);
+      if (newName) {
+        classes[classIndex].sections[sectionIndex].name = newName;
+        saveData();
+        renderClasses();
+      }
+    }
+
+    function addAssignment(classIndex, sectionIndex) {
       const assignmentName = prompt('Enter assignment name:');
       const score = parseFloat(prompt('Enter your score:'));
       const total = parseFloat(prompt('Enter total score:'));
       if (assignmentName && !isNaN(score) && !isNaN(total)) {
-        classes[classIndex].assignments.push({ name: assignmentName, score, total });
+        classes[classIndex].sections[sectionIndex].assignments.push({ name: assignmentName, score, total });
         saveData();
         renderClasses();
         updateTotalGrade();
       }
     }
 
-    function deleteAssignment(classIndex, assignmentIndex) {
+    function deleteAssignment(classIndex, sectionIndex, assignmentIndex) {
       if (confirm('Are you sure you want to delete this assignment?')) {
-        classes[classIndex].assignments.splice(assignmentIndex, 1);
+        classes[classIndex].sections[sectionIndex].assignments.splice(assignmentIndex, 1);
         saveData();
         renderClasses();
         updateTotalGrade();
       }
     }
 
-    function editAssignment(classIndex, assignmentIndex) {
-      const assignment = classes[classIndex].assignments[assignmentIndex];
+    function editAssignment(classIndex, sectionIndex, assignmentIndex) {
+      const assignment = classes[classIndex].sections[sectionIndex].assignments[assignmentIndex];
       const newName = prompt('Enter new assignment name:', assignment.name);
       const newScore = parseFloat(prompt('Enter new score:', assignment.score));
       const newTotal = parseFloat(prompt('Enter new total score:', assignment.total));
@@ -192,7 +224,7 @@
     }
 
     function updateTotalGrade() {
-      const allAssignments = classes.flatMap(cls => cls.assignments);
+      const allAssignments = classes.flatMap(cls => cls.sections.flatMap(sec => sec.assignments));
       const totalPercentage = calculatePercentage(allAssignments);
       document.getElementById('total-grade').textContent = `${totalPercentage}%`;
     }
@@ -211,24 +243,45 @@
           ${cls.expanded ? `
             <button onclick="editClass(${classIndex})">Edit Class Name</button>
             <button class="delete" onclick="deleteClass(${classIndex})">Delete Class</button>
-            <button onclick="addAssignment(${classIndex})">Add Assignment</button>
-            <div class="assignments" id="assignments-${classIndex}"></div>
-            <p>Class Percentage: <span class="percentage">${calculatePercentage(cls.assignments)}%</span></p>
+            <button onclick="addSection(${classIndex})">Add Section</button>
+            <div class="sections" id="sections-${classIndex}"></div>
           ` : ''}
         `;
         classesDiv.appendChild(classDiv);
 
         if (cls.expanded) {
-          const assignmentsDiv = document.getElementById(`assignments-${classIndex}`);
-          cls.assignments.forEach((assignment, assignmentIndex) => {
-            const assignmentDiv = document.createElement('div');
-            assignmentDiv.className = 'assignment';
-            assignmentDiv.innerHTML = `
-              <p>${assignment.name}: ${assignment.score} / ${assignment.total}</p>
-              <button class="edit" onclick="editAssignment(${classIndex}, ${assignmentIndex})">Edit</button>
-              <button class="delete" onclick="deleteAssignment(${classIndex}, ${assignmentIndex})">Delete</button>
+          const sectionsDiv = document.getElementById(`sections-${classIndex}`);
+          cls.sections.forEach((section, sectionIndex) => {
+            const sectionDiv = document.createElement('div');
+            sectionDiv.className = 'section';
+            sectionDiv.innerHTML = `
+              <div class="section-header" onclick="toggleSection(${classIndex}, ${sectionIndex})">
+                <h3>${section.name}</h3>
+                <span>${section.expanded ? '▼' : '▶'}</span>
+              </div>
+              ${section.expanded ? `
+                <button onclick="editSection(${classIndex}, ${sectionIndex})">Edit Section Name</button>
+                <button class="delete" onclick="deleteSection(${classIndex}, ${sectionIndex})">Delete Section</button>
+                <button onclick="addAssignment(${classIndex}, ${sectionIndex})">Add Assignment</button>
+                <div class="assignments" id="assignments-${classIndex}-${sectionIndex}"></div>
+                <p>Section Percentage: <span class="percentage">${calculatePercentage(section.assignments)}%</span></p>
+              ` : ''}
             `;
-            assignmentsDiv.appendChild(assignmentDiv);
+            sectionsDiv.appendChild(sectionDiv);
+
+            if (section.expanded) {
+              const assignmentsDiv = document.getElementById(`assignments-${classIndex}-${sectionIndex}`);
+              section.assignments.forEach((assignment, assignmentIndex) => {
+                const assignmentDiv = document.createElement('div');
+                assignmentDiv.className = 'assignment';
+                assignmentDiv.innerHTML = `
+                  <p>${assignment.name}: ${assignment.score} / ${assignment.total}</p>
+                  <button class="edit" onclick="editAssignment(${classIndex}, ${sectionIndex}, ${assignmentIndex})">Edit</button>
+                  <button class="delete" onclick="deleteAssignment(${classIndex}, ${sectionIndex}, ${assignmentIndex})">Delete</button>
+                `;
+                assignmentsDiv.appendChild(assignmentDiv);
+              });
+            }
           });
         }
       });
@@ -240,7 +293,7 @@
 
     function clearAllData() {
       if (confirm('Are you sure you want to clear ALL data? This cannot be undone.')) {
-        if (confirm('This will delete ALL classes and assignments. Are you absolutely sure?')) {
+        if (confirm('This will delete ALL classes, sections, and assignments. Are you absolutely sure?')) {
           classes = [];
           saveData();
           renderClasses();
