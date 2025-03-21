@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Clock</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #f4f4f9;
+      color: #333;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      height: 100vh;
+      margin: 0;
+    }
+    h1 {
+      font-size: 2.5rem;
+      margin-bottom: 20px;
+    }
+    .clock {
+      font-size: 2rem;
+      margin-bottom: 20px;
+    }
+    .schedule-selector {
+      margin-bottom: 20px;
+    }
+    .schedule-selector label {
+      font-size: 1.2rem;
+      margin-right: 10px;
+    }
+    .schedule-selector select {
+      font-size: 1rem;
+      padding: 5px;
+    }
+    .period-box {
+      background-color: #fff;
+      border: 1px solid #ccc;
+      padding: 20px;
+      border-radius: 10px;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+      text-align: center;
+      font-size: 1.5rem;
+    }
+  </style>
+</head>
+<body>
+  <h1>Clock</h1>
+  <div class="clock" id="clock">Loading...</div>
+  <div class="schedule-selector">
+    <label for="schedule">Select Schedule:</label>
+    <select id="schedule">
+      <option value="normal">Normal Keystone</option>
+      <option value="extended">Extended Keystone</option>
+    </select>
+  </div>
+  <div class="period-box" id="period-box">Select a schedule to see the current period.</div>
+
+  <script>
+    const schedules = {
+      normal: [
+        { period: "Keystone", start: "8:10", end: "8:17" },
+        { period: "Period 1", start: "8:20", end: "9:09" },
+        { period: "Period 2", start: "9:09", end: "9:58" },
+        { period: "Period 3", start: "9:58", end: "10:47" },
+        { period: "Period 4", start: "10:47", end: "11:22" },
+        { period: "Period 5", start: "11:22", end: "12:11" },
+        { period: "Period 6", start: "12:11", end: "1:00" },
+        { period: "Period 7", start: "1:00", end: "1:48" },
+        { period: "Period 8", start: "1:48", end: "2:36" }
+      ],
+      extended: [
+        { period: "Keystone", start: "8:10", end: "8:47" },
+        { period: "Period 1", start: "8:52", end: "9:35" },
+        { period: "Period 2", start: "9:35", end: "10:18" },
+        { period: "Period 3", start: "10:18", end: "11:01" },
+        { period: "Period 4", start: "11:01", end: "11:44" },
+        { period: "Period 5", start: "11:44", end: "12:27" },
+        { period: "Period 6", start: "12:27", end: "1:10" },
+        { period: "Period 7", start: "1:10", end: "1:53" },
+        { period: "Period 8", start: "1:53", end: "2:36" }
+      ]
+    };
+
+    function updateClock() {
+      const now = new Date();
+      const options = { timeZone: 'America/New_York', hour: 'numeric', minute: 'numeric', second: 'numeric', hour12: true };
+      const dateOptions = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
+      const timeString = now.toLocaleTimeString('en-US', options);
+      const dateString = now.toLocaleDateString('en-US', dateOptions);
+      document.getElementById('clock').innerHTML = `${dateString}<br>${timeString}`;
+
+      const scheduleType = document.getElementById('schedule').value;
+      const currentSchedule = schedules[scheduleType];
+      const currentTime = now.getHours() * 60 + now.getMinutes();
+
+      let currentPeriod = "You are not in school.";
+      for (const period of currentSchedule) {
+        const startTime = convertTimeToMinutes(period.start);
+        const endTime = convertTimeToMinutes(period.end);
+        if (currentTime >= startTime && currentTime < endTime) {
+          currentPeriod = `${period.period}: ${period.start} - ${period.end}`;
+          break;
+        }
+      }
+
+      document.getElementById('period-box').innerText = currentPeriod;
+    }
+
+    function convertTimeToMinutes(time) {
+      const [hour, minute] = time.split(':').map(Number);
+      return hour * 60 + minute;
+    }
+
+    setInterval(updateClock, 1000);
+    updateClock();
+  </script>
+</body>
+</html>
