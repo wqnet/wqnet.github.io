@@ -335,6 +335,7 @@
             <button class="delete" onclick="deleteClass(${classIndex})">Delete Class</button>
             <button onclick="addSection(${classIndex})">Add Section</button>
             <div class="sections" id="sections-${classIndex}"></div>
+            <p>Class Percentage: <span class="percentage">${calculatePercentage(cls.sections.flatMap(sec => sec.assignments))}%</span></p>
           ` : ''}
         `;
         classesDiv.appendChild(classDiv);
@@ -354,7 +355,6 @@
                 <button class="delete" onclick="deleteSection(${classIndex}, ${sectionIndex})">Delete Section</button>
                 <button onclick="addAssignment(${classIndex}, ${sectionIndex})">Add Assignment</button>
                 <div class="assignments" id="assignments-${classIndex}-${sectionIndex}"></div>
-                <p>Section Percentage: <span class="percentage">${calculatePercentage(section.assignments)}%</span></p>
               ` : ''}
             `;
             sectionsDiv.appendChild(sectionDiv);
